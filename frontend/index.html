@@ -1,36 +1,154 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>MyStore — Home</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="CommerceHub — Full-stack e-commerce storefront with JWT authentication, catalog management, cart, promo codes, and validated checkout." />
+  <title>CommerceHub — Full-Stack E-Commerce Store</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header>
-    <nav class="navbar">
-      <div id="user-box" class="user-box" style="display:none;">
-        <span id="username-display"></span>
-        <button id="logout-btn">Logout</button>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">CH</div>
+      <div>
+        <strong>CommerceHub</strong>
+        <small id="api-badge">Checking API...</small>
       </div>
-
-      <h2 class="logo">MyStore</h2>
-      <ul>
-        <li><a href="#" data-cat="all" class="nav-link">Home</a></li>
-        <li><a href="#" data-cat="T-Shirts" class="nav-link">T-Shirts</a></li>
-        <li><a href="#" data-cat="Shoes" class="nav-link">Shoes</a></li>
-        <li><a href="#" data-cat="Watches" class="nav-link">Watches</a></li>
-        <li><a href="#" data-cat="Bags" class="nav-link">Bags</a></li>
-      </ul>
-      <a class="cart-link" href="cart.html">🛒 Cart (<span id="cart-count">0</span>)</a>
-    </nav>
+    </div>
+    <div class="nav-actions">
+      <button id="btn-orders" class="btn btn-ghost" type="button">Orders</button>
+      <button id="btn-manage" class="btn btn-ghost" type="button">Manage Store</button>
+      <button id="btn-auth" class="btn btn-secondary" type="button">Sign In</button>
+      <button id="btn-cart" class="btn btn-primary" type="button">Cart (<span id="cart-count">0</span>)</button>
+    </div>
   </header>
 
-  <main>
-    <h1>Featured Products</h1>
-    <div id="product-list" class="grid"></div>
+  <main class="container">
+    <section class="hero">
+      <div>
+        <span class="eyebrow">FULL-STACK E-COMMERCE PLATFORM</span>
+        <h1>Curated essentials.<br />Built end-to-end.</h1>
+        <p>Browse inventory, manage catalog items, authenticate with JWT, apply promo code <code>SAVE10</code>, and complete a validated checkout workflow.</p>
+      </div>
+      <div class="hero-metrics">
+        <div><strong id="stat-products">0</strong><span>Live SKUs</span></div>
+        <div><strong>Free</strong><span>Shipping $100+</span></div>
+        <div><strong>SAVE10</strong><span>10% Promo Code</span></div>
+      </div>
+    </section>
+
+    <section class="toolbar">
+      <div class="category-pills" id="category-pills">
+        <button class="pill active" data-cat="all" type="button">All</button>
+        <button class="pill" data-cat="Apparel" type="button">Apparel</button>
+        <button class="pill" data-cat="Footwear" type="button">Footwear</button>
+        <button class="pill" data-cat="Watches" type="button">Watches</button>
+        <button class="pill" data-cat="Bags" type="button">Bags</button>
+      </div>
+      <div class="search-sort">
+        <input id="search-input" type="search" placeholder="Search products..." aria-label="Search products" />
+        <select id="sort-select" aria-label="Sort products">
+          <option value="featured">Sort: Featured</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="rating">Top Rated</option>
+        </select>
+      </div>
+    </section>
+
+    <section id="product-grid" class="product-grid" aria-live="polite"></section>
   </main>
 
+  <!-- Slide-over Cart & Checkout Drawer -->
+  <aside id="cart-drawer" class="drawer" hidden aria-label="Shopping cart and checkout">
+    <div class="drawer-head">
+      <h2>Your Bag &amp; Checkout</h2>
+      <button class="icon-btn" data-close="cart-drawer" type="button" aria-label="Close cart">&times;</button>
+    </div>
+    <div id="cart-items" class="drawer-body"></div>
+    <div class="drawer-foot">
+      <div class="promo-row">
+        <input id="promo-input" type="text" placeholder="Promo code (try SAVE10)" />
+        <button id="btn-apply-promo" class="btn btn-secondary" type="button">Apply</button>
+      </div>
+      <div class="totals">
+        <div><span>Subtotal</span><strong id="sum-subtotal">$0.00</strong></div>
+        <div><span>Discount</span><strong id="sum-discount">-$0.00</strong></div>
+        <div><span>Shipping</span><strong id="sum-shipping">$0.00</strong></div>
+        <div class="total-line"><span>Total</span><strong id="sum-total">$0.00</strong></div>
+      </div>
+      <form id="checkout-form" class="checkout-form">
+        <input id="chk-name" type="text" placeholder="Full Name" required />
+        <input id="chk-address" type="text" placeholder="Shipping Address (Street, City)" required />
+        <select id="chk-payment">
+          <option value="Card">Credit / Debit Card (Demo)</option>
+          <option value="COD">Cash on Delivery</option>
+        </select>
+        <button class="btn btn-primary full-width" type="submit">Place Order</button>
+      </form>
+      <p id="checkout-status" class="status-msg"></p>
+    </div>
+  </aside>
+
+  <!-- Auth Modal -->
+  <div id="auth-modal" class="modal" hidden>
+    <div class="modal-card">
+      <div class="drawer-head">
+        <h2 id="auth-title">Sign In to CommerceHub</h2>
+        <button class="icon-btn" data-close="auth-modal" type="button">&times;</button>
+      </div>
+      <div class="tabs-row">
+        <button id="tab-login" class="pill active" type="button">Sign In</button>
+        <button id="tab-signup" class="pill" type="button">Create Account</button>
+      </div>
+      <form id="auth-form" class="modal-form">
+        <input id="auth-username" type="text" placeholder="Full Name / Username" hidden />
+        <input id="auth-email" type="email" placeholder="Email address" required />
+        <input id="auth-password" type="password" placeholder="Password (min 6 chars)" minlength="6" required />
+        <button class="btn btn-primary full-width" type="submit" id="auth-submit">Sign In</button>
+      </form>
+      <p id="auth-msg" class="status-msg"></p>
+    </div>
+  </div>
+
+  <!-- Store Manager Modal -->
+  <div id="manage-modal" class="modal" hidden>
+    <div class="modal-card modal-wide">
+      <div class="drawer-head">
+        <h2>Merchant Product Manager</h2>
+        <button class="icon-btn" data-close="manage-modal" type="button">&times;</button>
+      </div>
+      <p class="muted">Add a new SKU to the live catalog or remove existing items. Requires an active session.</p>
+      <form id="add-product-form" class="grid-form">
+        <input id="new-name" type="text" placeholder="Product Name" required />
+        <select id="new-cat">
+          <option value="Apparel">Apparel</option>
+          <option value="Footwear">Footwear</option>
+          <option value="Watches">Watches</option>
+          <option value="Bags">Bags</option>
+        </select>
+        <input id="new-price" type="number" min="1" step="0.01" placeholder="Price ($)" required />
+        <input id="new-stock" type="number" min="1" value="15" placeholder="Stock" required />
+        <input id="new-desc" type="text" placeholder="Short description" class="span-2" required />
+        <button class="btn btn-primary span-2" type="submit">Add Product to Store</button>
+      </form>
+      <p id="manage-msg" class="status-msg"></p>
+    </div>
+  </div>
+
+  <!-- Orders Modal -->
+  <div id="orders-modal" class="modal" hidden>
+    <div class="modal-card modal-wide">
+      <div class="drawer-head">
+        <h2>Order History</h2>
+        <button class="icon-btn" data-close="orders-modal" type="button">&times;</button>
+      </div>
+      <div id="orders-list" class="orders-list"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" hidden></div>
   <script src="app.js"></script>
 </body>
 </html>

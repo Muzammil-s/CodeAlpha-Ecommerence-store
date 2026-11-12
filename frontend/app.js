@@ -1,325 +1,390 @@
-// frontend/app.js
-// ===== Products (40 items) with categories and image paths =====
-// frontend/app.js
-// ===== Products with realistic names, categories, prices =====
-// frontend/app.js
-// ===== Products (40) with unique names, categories, prices =====
-const products = [
-  // T-Shirts (10)
-  { id: "tshirt1", name: "Classic Polo Shirt", category: "T-Shirts", description: "Premium cotton polo with button collar.", price: 25, image: "images/tshirt1.jpg" },
-  { id: "tshirt2", name: "Graphic Tee", category: "T-Shirts", description: "Trendy graphic print cotton t-shirt.", price: 18, image: "images/tshirt2.jpg" },
-  { id: "tshirt3", name: "V-Neck Tee", category: "T-Shirts", description: "Slim-fit v-neck t-shirt for casual wear.", price: 20, image: "images/tshirt3.jpg" },
-  { id: "tshirt4", name: "Oversized Hoodie", category: "T-Shirts", description: "Casual oversized hoodie with kangaroo pocket.", price: 35, image: "images/tshirt4.jpg" },
-  { id: "tshirt5", name: "Sports Jersey", category: "T-Shirts", description: "Lightweight breathable jersey for workouts.", price: 28, image: "images/tshirt5.jpg" },
-  { id: "tshirt6", name: "Henley Shirt", category: "T-Shirts", description: "3-button henley cotton t-shirt.", price: 22, image: "images/tshirt6.jpg" },
-  { id: "tshirt7", name: "Long Sleeve Tee", category: "T-Shirts", description: "Comfortable long sleeve casual tee.", price: 27, image: "images/tshirt7.jpg" },
-  { id: "tshirt8", name: "Striped Tee", category: "T-Shirts", description: "Modern striped pattern cotton t-shirt.", price: 19, image: "images/tshirt8.jpg" },
-  { id: "tshirt9", name: "Basic White Tee", category: "T-Shirts", description: "Everyday classic plain white t-shirt.", price: 15, image: "images/tshirt9.jpg" },
-  { id: "tshirt10", name: "Premium Black Tee", category: "T-Shirts", description: "High-quality cotton black t-shirt.", price: 30, image: "images/tshirt10.jpg" },
+(() => {
+  const FALLBACK_PRODUCTS = [
+    { id: 'tshirt1', name: 'Classic Cotton Polo', category: 'Apparel', price: 29, stock: 24, rating: 4.7, description: 'Breathable combed cotton polo tailored for everyday wear.', badge: 'Bestseller' },
+    { id: 'tshirt2', name: 'Heavyweight Oversized Hoodie', category: 'Apparel', price: 48, stock: 16, rating: 4.8, description: '400gsm brushed fleece hoodie with reinforced seams.', badge: 'New' },
+    { id: 'shoe1', name: 'Stride Pro Running Shoes', category: 'Footwear', price: 78, stock: 14, rating: 4.8, description: 'Responsive EVA midsole with engineered mesh upper.', badge: 'Popular' },
+    { id: 'shoe2', name: 'Trail Grip Hiking Boots', category: 'Footwear', price: 112, stock: 9, rating: 4.9, description: 'All-weather lug outsole built for rocky terrain.', badge: 'Top Rated' },
+    { id: 'watch1', name: 'Chrono Steel Wristwatch', category: 'Watches', price: 145, stock: 8, rating: 4.9, description: 'Brushed 316L stainless steel case with sapphire crystal.', badge: 'Featured' },
+    { id: 'watch2', name: 'Active Pulse Smartwatch', category: 'Watches', price: 165, stock: 13, rating: 4.7, description: 'AMOLED display with workout tracking and 7-day battery.', badge: 'New' },
+    { id: 'bag1', name: 'Commuter 16" Laptop Pack', category: 'Bags', price: 58, stock: 20, rating: 4.8, description: 'Water-resistant ballistic nylon backpack with padded sleeve.', badge: 'Bestseller' },
+    { id: 'bag2', name: 'Weekender Travel Duffel', category: 'Bags', price: 74, stock: 12, rating: 4.7, description: 'Cabin-sized travel bag with separate shoe compartment.', badge: '' }
+  ];
 
-  // Shoes (10)
-  { id: "shoe1", name: "Running Shoes", category: "Shoes", description: "Lightweight breathable running shoes.", price: 60, image: "images/shoe1.jpg" },
-  { id: "shoe2", name: "High-top Sneakers", category: "Shoes", description: "Streetwear high-top sneakers.", price: 70, image: "images/shoe2.jpg" },
-  { id: "shoe3", name: "Formal Leather Shoes", category: "Shoes", description: "Classic black leather office shoes.", price: 85, image: "images/shoe3.jpg" },
-  { id: "shoe4", name: "Casual Slip-ons", category: "Shoes", description: "Comfortable casual slip-on shoes.", price: 45, image: "images/shoe4.jpg" },
-  { id: "shoe5", name: "Trail Hiking Boots", category: "Shoes", description: "Durable hiking boots with strong grip.", price: 95, image: "images/shoe5.jpg" },
-  { id: "shoe6", name: "Canvas Sneakers", category: "Shoes", description: "Classic low-top canvas sneakers.", price: 40, image: "images/shoe6.jpg" },
-  { id: "shoe7", name: "Training Gym Shoes", category: "Shoes", description: "Lightweight gym training shoes.", price: 55, image: "images/shoe7.jpg" },
-  { id: "shoe8", name: "Loafers", category: "Shoes", description: "Stylish slip-on leather loafers.", price: 65, image: "images/shoe8.jpg" },
-  { id: "shoe9", name: "Sandals", category: "Shoes", description: "Comfortable open-toe sandals.", price: 35, image: "images/shoe9.jpg" },
-  { id: "shoe10", name: "Designer Sneakers", category: "Shoes", description: "Premium branded sneakers.", price: 120, image: "images/shoe10.jpg" },
+  const CATEGORY_SVG = {
+    Apparel: '<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.6"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"/></svg>',
+    Footwear: '<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.6"><path d="M4 16v-3a2 2 0 012-2h2l3-4 4 3 4 2a2 2 0 011 1.7V16a2 2 0 01-2 2H6a2 2 0 01-2-2z"/><path d="M4 18h16"/></svg>',
+    Watches: '<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="1.6"><circle cx="12" cy="12" r="6"/><polyline points="12 10 12 12 13.5 13.5"/><path d="M9 6V2h6v4M9 18v4h6v-4"/></svg>',
+    Bags: '<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="1.6"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 7V5a3 3 0 016 0v2"/></svg>'
+  };
 
-  // Watches (10)
-  { id: "watch1", name: "Digital Sports Watch", category: "Watches", description: "Durable digital sports watch.", price: 55, image: "images/watch1.jpg" },
-  { id: "watch2", name: "Leather Strap Watch", category: "Watches", description: "Elegant brown leather strap watch.", price: 120, image: "images/watch2.jpg" },
-  { id: "watch3", name: "Luxury Gold Watch", category: "Watches", description: "Gold-plated premium luxury watch.", price: 250, image: "images/watch3.jpg" },
-  { id: "watch4", name: "Smart Watch", category: "Watches", description: "Touchscreen smartwatch with fitness tracking.", price: 180, image: "images/watch4.jpg" },
-  { id: "watch5", name: "Classic Silver Watch", category: "Watches", description: "Silver stainless steel wristwatch.", price: 140, image: "images/watch5.jpg" },
-  { id: "watch6", name: "Minimalist Watch", category: "Watches", description: "Clean design minimalist wristwatch.", price: 90, image: "images/watch6.jpg" },
-  { id: "watch7", name: "Diver’s Watch", category: "Watches", description: "Water-resistant diver’s watch.", price: 200, image: "images/watch7.jpg" },
-  { id: "watch8", name: "Chronograph Watch", category: "Watches", description: "Multi-dial chronograph wristwatch.", price: 160, image: "images/watch8.jpg" },
-  { id: "watch9", name: "Titanium Watch", category: "Watches", description: "Lightweight titanium wristwatch.", price: 300, image: "images/watch9.jpg" },
-  { id: "watch10", name: "Luxury Diamond Watch", category: "Watches", description: "Luxury watch with diamond accents.", price: 500, image: "images/watch10.jpg" },
+  let apiOnline = false;
+  let products = [];
+  let activeCategory = 'all';
+  let activePromo = '';
+  let authMode = 'login';
 
-  // Bags (10)
-  { id: "bag1", name: "Laptop Backpack", category: "Bags", description: "Spacious backpack with laptop sleeve.", price: 45, image: "images/bag1.jpg" },
-  { id: "bag2", name: "Travel Duffel Bag", category: "Bags", description: "Durable duffel bag for travel.", price: 65, image: "images/bag2.jpg" },
-  { id: "bag3", name: "Casual Shoulder Bag", category: "Bags", description: "Everyday stylish shoulder bag.", price: 40, image: "images/bag3.jpg" },
-  { id: "bag4", name: "Leather Handbag", category: "Bags", description: "Premium leather handbag for women.", price: 95, image: "images/bag4.jpg" },
-  { id: "bag5", name: "School Backpack", category: "Bags", description: "Lightweight backpack for students.", price: 30, image: "images/bag5.jpg" },
-  { id: "bag6", name: "Gym Bag", category: "Bags", description: "Compact gym duffel bag.", price: 38, image: "images/bag6.jpg" },
-  { id: "bag7", name: "Messenger Bag", category: "Bags", description: "Classic crossbody messenger bag.", price: 55, image: "images/bag7.jpg" },
-  { id: "bag8", name: "Rolling Travel Bag", category: "Bags", description: "Carry-on rolling travel bag.", price: 110, image: "images/bag8.jpg" },
-  { id: "bag9", name: "Mini Backpack", category: "Bags", description: "Compact mini backpack for casual outings.", price: 35, image: "images/bag9.jpg" },
-  { id: "bag10", name: "Designer Tote Bag", category: "Bags", description: "Luxury branded tote bag.", price: 150, image: "images/bag10.jpg" },
-];
+  const getToken = () => localStorage.getItem('ch_token');
+  const getUser = () => {
+    try { return JSON.parse(localStorage.getItem('ch_user') || 'null'); } catch { return null; }
+  };
+  const getCart = () => {
+    try { return JSON.parse(localStorage.getItem('ch_cart') || '[]'); } catch { return []; }
+  };
+  const saveCart = (cart) => localStorage.setItem('ch_cart', JSON.stringify(cart));
 
+  function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.hidden = false;
+    clearTimeout(el._t);
+    el._t = setTimeout(() => { el.hidden = true; }, 2400);
+  }
 
+  async function apiFetch(url, opts = {}) {
+    const token = getToken();
+    const headers = { 'Content-Type': 'application/json', ...(opts.headers || {}) };
+    if (token) headers.Authorization = `Bearer ${token}`;
+    const res = await fetch(url, { ...opts, headers });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Request failed');
+    return data;
+  }
 
-// ===== state =====
-let currentCategory = "all";
+  async function loadProducts() {
+    const q = document.getElementById('search-input').value.trim();
+    const sort = document.getElementById('sort-select').value;
+    if (apiOnline) {
+      const params = new URLSearchParams();
+      if (activeCategory !== 'all') params.set('category', activeCategory);
+      if (q) params.set('q', q);
+      if (sort !== 'featured') params.set('sort', sort);
+      const data = await apiFetch(`/api/products?${params.toString()}`);
+      products = data.products;
+    } else {
+      const localStored = JSON.parse(localStorage.getItem('ch_demo_products') || 'null') || FALLBACK_PRODUCTS;
+      products = localStored.filter((p) => {
+        if (activeCategory !== 'all' && p.category !== activeCategory) return false;
+        if (q && !(`${p.name} ${p.description} ${p.category}`).toLowerCase().includes(q.toLowerCase())) return false;
+        return true;
+      });
+      if (sort === 'price-asc') products.sort((a, b) => a.price - b.price);
+      if (sort === 'price-desc') products.sort((a, b) => b.price - a.price);
+      if (sort === 'rating') products.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+    }
+    document.getElementById('stat-products').textContent = products.length;
+    renderProducts();
+  }
 
-// ===== render product grid (with optional category filter) =====
-function renderProducts() {
-  const list = document.getElementById("product-list");
-  if (!list) return;
-  list.innerHTML = "";
-
-  const filtered = (currentCategory === "all")
-    ? products
-    : products.filter(p => p.category === currentCategory);
-
-  filtered.forEach(p => {
-    const div = document.createElement("div");
-    div.className = "card";
-
-    div.innerHTML = `
-      <img src="${p.image}" alt="${escapeHtml(p.name)}">
-      <h3 class="prod-title" data-cat="${p.category}">${escapeHtml(p.name)}</h3>
-      <p class="cat-name">${escapeHtml(p.category)}</p>
-      <p>${escapeHtml(p.description)}</p>
-      <p><strong>$${Number(p.price).toFixed(2)}</strong></p>
-    `;
-
-    const btn = document.createElement("button");
-    btn.textContent = "Add to Cart";
-    btn.addEventListener("click", () => {
-      addToCart(p);
-      updateCartBadge();
-      showToast(`${p.name} added to cart`);
-    });
-
-    div.appendChild(btn);
-    list.appendChild(div);
-  });
-}
-
-// ===== Cart helpers (localStorage key = 'cart') =====
-function loadCart() {
-  const raw = localStorage.getItem("cart");
-  return raw ? JSON.parse(raw) : [];
-}
-function saveCart(cart) {
-  localStorage.setItem("cart", JSON.stringify(cart));
-}
-
-// add product (by object)
-function addToCart(product) {
-  const cart = loadCart();
-  const idx = cart.findIndex(i => i.id === product.id);
-  if (idx > -1) cart[idx].qty = (cart[idx].qty || 1) + 1;
-  else cart.push({ id: product.id, name: product.name, price: product.price, image: product.image, qty: 1 });
-  saveCart(cart);
-}
-
-// change qty
-function changeQty(id, delta) {
-  const cart = loadCart();
-  const idx = cart.findIndex(i => i.id === id);
-  if (idx === -1) return;
-  cart[idx].qty = Math.max(1, cart[idx].qty + delta);
-  saveCart(cart);
-  renderCart(); // if on cart page
-  updateCartBadge();
-}
-
-// remove item
-function removeItem(id) {
-  let cart = loadCart();
-  cart = cart.filter(i => i.id !== id);
-  saveCart(cart);
-  renderCart();
-  updateCartBadge();
-}
-
-// clear cart
-function clearCart() {
-  localStorage.removeItem("cart");
-  renderCart();
-  updateCartBadge();
-}
-
-// checkout (simulate)
-function checkout() {
-  const cart = loadCart();
-  if (!cart.length) return alert("Cart is empty.");
-
-  const orderId = "ORD-" + Math.floor(Math.random()*100000);
-  const total = cart.reduce((s, it) => s + it.price * it.qty, 0).toFixed(2);
-
-  alert(`✅ Order placed!\nOrder ID: ${orderId}\nTotal: $${total}\nThank you for shopping.`);
-
-  clearCart();
-  window.location.href = "index.html";
-}
-
-
-// ===== render cart page =====
-// ===== render cart page =====
-function renderCart() {
-  const container = document.getElementById("cart-items");
-  const summaryCount = document.getElementById("summary-count");
-  const summaryTotal = document.getElementById("summary-total");
-  if (!container) return;
-
-  const cart = loadCart();
-  container.innerHTML = "";
-  let total = 0;
-  let count = 0;
-
-  if (!cart.length) {
-    container.innerHTML = "<p>Your cart is empty.</p>";
-  } else {
-    cart.forEach(item => {
-      total += item.price * item.qty;
-      count += item.qty;
-
-      const el = document.createElement("div");
-      el.className = "cart-item";
-      el.innerHTML = `
-        <div class="left">
-          <img src="${item.image}" alt="${escapeHtml(item.name)}">
-          <div>
-            <div><strong>${escapeHtml(item.name)}</strong></div>
-            <div>$${Number(item.price).toFixed(2)}</div>
-          </div>
+  function renderProducts() {
+    const grid = document.getElementById('product-grid');
+    if (!products.length) {
+      grid.innerHTML = '<p class="muted">No products match your search criteria.</p>';
+      return;
+    }
+    grid.innerHTML = '';
+    const user = getUser();
+    products.forEach((p) => {
+      const card = document.createElement('article');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="card-art">
+          ${p.badge ? `<span class="card-badge">${p.badge}</span>` : ''}
+          ${CATEGORY_SVG[p.category] || CATEGORY_SVG.Apparel}
         </div>
-        <div class="right">
-          <div class="qty-controls">
-            <button class="dec" data-id="${item.id}">-</button>
-            <span class="qty">${item.qty}</span>
-            <button class="inc" data-id="${item.id}">+</button>
-            <button class="remove" data-id="${item.id}">Remove</button>
-          </div>
+        <div class="card-meta"><span>${p.category}</span><span>★ ${p.rating || 4.6} · Stock: ${p.stock}</span></div>
+        <h3></h3>
+        <p></p>
+        <div class="card-foot">
+          <strong class="price">$${Number(p.price).toFixed(2)}</strong>
+          <div class="card-actions"></div>
         </div>
       `;
-      container.appendChild(el);
-    });
+      card.querySelector('h3').textContent = p.name;
+      card.querySelector('p').textContent = p.description;
+      const actions = card.querySelector('.card-actions');
+      const addBtn = document.createElement('button');
+      addBtn.className = 'btn btn-primary';
+      addBtn.textContent = p.stock > 0 ? 'Add' : 'Out of Stock';
+      addBtn.disabled = p.stock <= 0;
+      addBtn.addEventListener('click', () => addToCart(p));
+      actions.append(addBtn);
 
-    // attach handlers
-    container.querySelectorAll(".inc").forEach(b => b.addEventListener("click", (e) => changeQty(e.target.dataset.id, 1)));
-    container.querySelectorAll(".dec").forEach(b => b.addEventListener("click", (e) => changeQty(e.target.dataset.id, -1)));
-    container.querySelectorAll(".remove").forEach(b => b.addEventListener("click", (e) => removeItem(e.target.dataset.id)));
+      if (user) {
+        const delBtn = document.createElement('button');
+        delBtn.className = 'btn btn-ghost';
+        delBtn.textContent = 'Del';
+        delBtn.title = 'Remove SKU';
+        delBtn.addEventListener('click', () => deleteProduct(p.id));
+        actions.append(delBtn);
+      }
+      grid.append(card);
+    });
   }
 
-  summaryCount && (summaryCount.textContent = `Items: ${count}`);
-  summaryTotal && (summaryTotal.textContent = `Total: $${total.toFixed(2)}`);
-}
+  function addToCart(product) {
+    const cart = getCart();
+    const existing = cart.find((i) => i.productId === product.id);
+    if (existing) existing.qty += 1;
+    else cart.push({ productId: product.id, name: product.name, price: product.price, qty: 1 });
+    saveCart(cart);
+    renderCart();
+    toast(`Added ${product.name} to bag`);
+  }
 
+  function renderCart() {
+    const cart = getCart();
+    const count = cart.reduce((s, i) => s + i.qty, 0);
+    document.getElementById('cart-count').textContent = count;
 
-// ===== nav/category handling =====
-function setupCategoryLinks() {
-  document.querySelectorAll(".nav-link").forEach(a => {
-    a.addEventListener("click", (ev) => {
-      ev.preventDefault();
-      const cat = a.dataset.cat;
-      currentCategory = cat === "all" ? "all" : cat;
-      renderProducts();
-    });
+    const list = document.getElementById('cart-items');
+    if (!cart.length) {
+      list.innerHTML = '<p class="muted">Your bag is empty. Add items from the catalog to check out.</p>';
+    } else {
+      list.innerHTML = '';
+      cart.forEach((item) => {
+        const row = document.createElement('div');
+        row.className = 'cart-row';
+        row.innerHTML = `
+          <div><strong></strong><div><small>$${Number(item.price).toFixed(2)} each</small></div></div>
+          <div class="qty-box">
+            <button class="qty-btn" data-d="-1">-</button>
+            <span>${item.qty}</span>
+            <button class="qty-btn" data-d="1">+</button>
+            <button class="qty-btn" data-rem="1" title="Remove">&times;</button>
+          </div>
+        `;
+        row.querySelector('strong').textContent = item.name;
+        row.querySelectorAll('[data-d]').forEach((b) => b.addEventListener('click', () => {
+          item.qty = Math.max(1, item.qty + Number(b.dataset.d));
+          saveCart(cart);
+          renderCart();
+        }));
+        row.querySelector('[data-rem]').addEventListener('click', () => {
+          saveCart(cart.filter((c) => c.productId !== item.productId));
+          renderCart();
+        });
+        list.append(row);
+      });
+    }
+
+    const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    const discount = activePromo === 'SAVE10' ? subtotal * 0.1 : 0;
+    const shipping = subtotal === 0 || subtotal >= 100 ? 0 : 8;
+    const total = Math.max(0, subtotal - discount + shipping);
+
+    document.getElementById('sum-subtotal').textContent = `$${subtotal.toFixed(2)}`;
+    document.getElementById('sum-discount').textContent = `-$${discount.toFixed(2)}`;
+    document.getElementById('sum-shipping').textContent = shipping === 0 && subtotal > 0 ? 'FREE' : `$${shipping.toFixed(2)}`;
+    document.getElementById('sum-total').textContent = `$${total.toFixed(2)}`;
+  }
+
+  async function deleteProduct(id) {
+    if (apiOnline) {
+      await apiFetch(`/api/products/${id}`, { method: 'DELETE' });
+    } else {
+      const list = (JSON.parse(localStorage.getItem('ch_demo_products') || 'null') || FALLBACK_PRODUCTS).filter((p) => p.id !== id);
+      localStorage.setItem('ch_demo_products', JSON.stringify(list));
+    }
+    toast('Product removed');
+    loadProducts();
+  }
+
+  function updateAuthUI() {
+    const user = getUser();
+    const btn = document.getElementById('btn-auth');
+    btn.textContent = user ? `${user.username} (Sign Out)` : 'Sign In';
+  }
+
+  async function init() {
+    try {
+      const res = await fetch('/api/health');
+      if (res.ok) {
+        apiOnline = true;
+        document.getElementById('api-badge').textContent = 'Express/Node API Connected';
+      } else throw new Error();
+    } catch {
+      apiOnline = false;
+      document.getElementById('api-badge').textContent = 'Static Browser Demo Mode';
+    }
+    updateAuthUI();
+    renderCart();
+    await loadProducts();
+  }
+
+  document.getElementById('category-pills').addEventListener('click', (e) => {
+    if (!e.target.dataset.cat) return;
+    activeCategory = e.target.dataset.cat;
+    document.querySelectorAll('#category-pills .pill').forEach((p) => p.classList.toggle('active', p.dataset.cat === activeCategory));
+    loadProducts();
+  });
+  document.getElementById('search-input').addEventListener('input', loadProducts);
+  document.getElementById('sort-select').addEventListener('change', loadProducts);
+
+  document.getElementById('btn-cart').addEventListener('click', () => { document.getElementById('cart-drawer').hidden = false; });
+  document.querySelectorAll('[data-close]').forEach((b) => b.addEventListener('click', () => {
+    document.getElementById(b.dataset.close).hidden = true;
+  }));
+
+  document.getElementById('btn-apply-promo').addEventListener('click', () => {
+    activePromo = document.getElementById('promo-input').value.trim().toUpperCase();
+    renderCart();
+    toast(activePromo === 'SAVE10' ? 'SAVE10 applied (10% off)!' : 'Promo code invalid (try SAVE10)');
   });
 
-  // clicking product title filters by that product's category
-  document.getElementById("product-list")?.addEventListener("click", (ev) => {
-    const t = ev.target;
-    if (t.classList.contains("prod-title")) {
-      const cat = t.dataset.cat;
-      currentCategory = cat;
-      renderProducts();
-      window.scrollTo({ top: 200, behavior: "smooth" });
+  document.getElementById('checkout-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const cart = getCart();
+    const status = document.getElementById('checkout-status');
+    if (!cart.length) { status.textContent = 'Add at least one item before checking out.'; return; }
+
+    const payload = {
+      customerName: document.getElementById('chk-name').value.trim(),
+      shippingAddress: document.getElementById('chk-address').value.trim(),
+      paymentMethod: document.getElementById('chk-payment').value,
+      promoCode: activePromo,
+      items: cart.map((c) => ({ productId: c.productId, qty: c.qty }))
+    };
+
+    try {
+      let order;
+      if (apiOnline) {
+        const data = await apiFetch('/api/orders', { method: 'POST', body: JSON.stringify(payload) });
+        order = data.order;
+      } else {
+        const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+        const discount = activePromo === 'SAVE10' ? subtotal * 0.1 : 0;
+        const shipping = subtotal >= 100 ? 0 : 8;
+        order = {
+          id: 'ORD-' + Math.floor(100000 + Math.random() * 900000),
+          ...payload,
+          items: cart,
+          total: Number((subtotal - discount + shipping).toFixed(2)),
+          status: 'Confirmed',
+          createdAt: new Date().toISOString()
+        };
+        const saved = JSON.parse(localStorage.getItem('ch_demo_orders') || '[]');
+        saved.unshift(order);
+        localStorage.setItem('ch_demo_orders', JSON.stringify(saved));
+      }
+      saveCart([]);
+      renderCart();
+      await loadProducts();
+      status.textContent = `Order ${order.id} confirmed ($${order.total.toFixed(2)})!`;
+      toast(`Order ${order.id} placed!`);
+    } catch (err) {
+      status.textContent = err.message;
     }
   });
-}
 
-// ===== cart badge =====
-function updateCartBadge() {
-  const cart = loadCart();
-  const count = cart.reduce((s, i) => s + (i.qty || 0), 0);
-  document.getElementById("cart-count") && (document.getElementById("cart-count").textContent = count);
-}
-
-// simple toast
-function showToast(message) {
-  const t = document.createElement("div");
-  t.className = "simple-toast";
-  t.innerText = message;
-  document.body.appendChild(t);
-  setTimeout(() => t.classList.add("visible"), 10);
-  setTimeout(() => { t.classList.remove("visible"); setTimeout(() => t.remove(), 300); }, 2000);
-}
-
-// escape HTML
-function escapeHtml(str) {
-  if (!str) return "";
-  return str.replace(/[&<>"']/g, m => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
-}
-
-// ===== init on load =====
-document.addEventListener("DOMContentLoaded", () => {
-  setupCategoryLinks();
-  renderProducts();
-  renderCart();
-  updateCartBadge();
-
-  // ✅ User info display
- const userBox = document.getElementById("user-box");
-const usernameDisplay = document.getElementById("username-display");
-const logoutBtn = document.getElementById("logout-btn");
-
-const user = localStorage.getItem("user");
-if (user && usernameDisplay && userBox) {
-  const parsed = JSON.parse(user);
-  usernameDisplay.textContent = parsed.username;
-  userBox.style.display = "inline-flex";
-}
-
-
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", () => {
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
-      alert("👋 Logged out successfully!");
-      window.location.href = "login.html";
-    });
-  }
-
-  // ✅ Cart page buttons
-  const checkoutBtn = document.getElementById("checkout-btn");
-  const clearBtn = document.getElementById("clear-btn");
-  checkoutBtn && checkoutBtn.addEventListener("click", checkout);
-  clearBtn && clearBtn.addEventListener("click", () => { 
-    if (confirm("Clear cart?")) clearCart(); 
+  document.getElementById('btn-auth').addEventListener('click', () => {
+    if (getUser()) {
+      localStorage.removeItem('ch_token');
+      localStorage.removeItem('ch_user');
+      updateAuthUI();
+      renderProducts();
+      toast('Signed out');
+      return;
+    }
+    document.getElementById('auth-modal').hidden = false;
   });
-});
 
-function renderProductDetail() {
-  const container = document.getElementById("product-detail");
-  if (!container) return;
-
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("id");
-  const p = products.find(pr => pr.id === id);
-
-  if (!p) {
-    container.innerHTML = "<p>Product not found.</p>";
-    return;
-  }
-
-  container.innerHTML = `
-    <div class="detail-card">
-      <img src="${p.image}" alt="${escapeHtml(p.name)}" class="detail-img">
-      <div>
-        <h2>${escapeHtml(p.name)}</h2>
-        <p><em>${escapeHtml(p.category)}</em></p>
-        <p>${escapeHtml(p.description)}</p>
-        <p><strong>$${p.price.toFixed(2)}</strong></p>
-        <button id="add-detail-cart">Add to Cart</button>
-      </div>
-    </div>
-  `;
-
-  document.getElementById("add-detail-cart").addEventListener("click", () => {
-    addToCart(p);
-    updateCartBadge();
-    alert(`${p.name} added to cart`);
+  document.getElementById('tab-login').addEventListener('click', () => {
+    authMode = 'login';
+    document.getElementById('tab-login').classList.add('active');
+    document.getElementById('tab-signup').classList.remove('active');
+    document.getElementById('auth-username').hidden = true;
+    document.getElementById('auth-submit').textContent = 'Sign In';
+    document.getElementById('auth-title').textContent = 'Sign In to CommerceHub';
   });
-}
+
+  document.getElementById('tab-signup').addEventListener('click', () => {
+    authMode = 'signup';
+    document.getElementById('tab-signup').classList.add('active');
+    document.getElementById('tab-login').classList.remove('active');
+    document.getElementById('auth-username').hidden = false;
+    document.getElementById('auth-submit').textContent = 'Create Account';
+    document.getElementById('auth-title').textContent = 'Create CommerceHub Account';
+  });
+
+  document.getElementById('auth-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('auth-email').value.trim();
+    const password = document.getElementById('auth-password').value;
+    const username = document.getElementById('auth-username').value.trim() || email.split('@')[0];
+    const msg = document.getElementById('auth-msg');
+    try {
+      if (apiOnline) {
+        const endpoint = authMode === 'signup' ? '/api/auth/signup' : '/api/auth/login';
+        const data = await apiFetch(endpoint, { method: 'POST', body: JSON.stringify({ username, email, password }) });
+        localStorage.setItem('ch_token', data.token);
+        localStorage.setItem('ch_user', JSON.stringify(data.user));
+      } else {
+        localStorage.setItem('ch_token', 'demo-session');
+        localStorage.setItem('ch_user', JSON.stringify({ id: 'demo', username, email }));
+      }
+      document.getElementById('auth-modal').hidden = true;
+      updateAuthUI();
+      renderProducts();
+      toast(`Welcome, ${username}!`);
+    } catch (err) {
+      msg.textContent = err.message;
+    }
+  });
+
+  document.getElementById('btn-manage').addEventListener('click', () => {
+    if (!getUser()) {
+      document.getElementById('auth-modal').hidden = false;
+      toast('Sign in to manage store catalog');
+      return;
+    }
+    document.getElementById('manage-modal').hidden = false;
+  });
+
+  document.getElementById('add-product-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const payload = {
+      name: document.getElementById('new-name').value.trim(),
+      category: document.getElementById('new-cat').value,
+      price: Number(document.getElementById('new-price').value),
+      stock: Number(document.getElementById('new-stock').value),
+      description: document.getElementById('new-desc').value.trim()
+    };
+    try {
+      if (apiOnline) {
+        await apiFetch('/api/products', { method: 'POST', body: JSON.stringify(payload) });
+      } else {
+        const list = JSON.parse(localStorage.getItem('ch_demo_products') || 'null') || [...FALLBACK_PRODUCTS];
+        list.unshift({ id: 'prod-' + Date.now(), ...payload, rating: 4.8, badge: 'New' });
+        localStorage.setItem('ch_demo_products', JSON.stringify(list));
+      }
+      e.target.reset();
+      document.getElementById('manage-modal').hidden = true;
+      await loadProducts();
+      toast('Product added to catalog!');
+    } catch (err) {
+      document.getElementById('manage-msg').textContent = err.message;
+    }
+  });
+
+  document.getElementById('btn-orders').addEventListener('click', async () => {
+    const listEl = document.getElementById('orders-list');
+    document.getElementById('orders-modal').hidden = false;
+    try {
+      let orders = [];
+      if (apiOnline) {
+        if (!getToken()) { listEl.innerHTML = '<p class="muted">Sign in to view account order history.</p>'; return; }
+        const data = await apiFetch('/api/orders/mine');
+        orders = data.orders;
+      } else {
+        orders = JSON.parse(localStorage.getItem('ch_demo_orders') || '[]');
+      }
+      listEl.innerHTML = orders.length
+        ? orders.map((o) => `<div class="order-item"><strong>${o.id}</strong> · ${o.status} · <strong>$${Number(o.total).toFixed(2)}</strong><div>${o.customerName} — ${o.shippingAddress}</div></div>`).join('')
+        : '<p class="muted">No orders placed in this session yet.</p>';
+    } catch (err) {
+      listEl.innerHTML = `<p class="muted">${err.message}</p>`;
+    }
+  });
+
+  init();
+})();
