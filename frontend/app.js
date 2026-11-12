@@ -196,15 +196,20 @@
   }
 
   async function init() {
-    try {
-      const res = await fetch('/api/health');
-      if (res.ok) {
-        apiOnline = true;
-        document.getElementById('api-badge').textContent = 'Express/Node API Connected';
-      } else throw new Error();
-    } catch {
+    if (window.location.hostname.endsWith('.vercel.app') || window.location.hostname.endsWith('.github.io')) {
       apiOnline = false;
       document.getElementById('api-badge').textContent = 'Static Browser Demo Mode';
+    } else {
+      try {
+        const res = await fetch('/api/health');
+        if (res.ok) {
+          apiOnline = true;
+          document.getElementById('api-badge').textContent = 'Express/Node API Connected';
+        } else throw new Error();
+      } catch {
+        apiOnline = false;
+        document.getElementById('api-badge').textContent = 'Static Browser Demo Mode';
+      }
     }
     updateAuthUI();
     renderCart();
