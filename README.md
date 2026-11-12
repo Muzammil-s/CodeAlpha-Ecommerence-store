@@ -4,6 +4,11 @@
 
 ---
 
+## Live Demo
+
+- **Production URL:** [https://commercehub-demo.vercel.app/](https://commercehub-demo.vercel.app/)
+- **Mode:** Interactive storefront demo deployed on Vercel (full Express API backend included in repo for local Node execution).
+
 ## Application Preview
 
 ![CommerceHub E-Commerce Storefront](docs/screenshot.png)
