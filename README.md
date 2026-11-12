@@ -1,90 +1,67 @@
-🛍️ CodeAlpha E-commerce Store
+# E-Commerce Store
 
-This is a **fully functional mini E-commerce web application** built as part of the CodeAlpha internship program.  
-It includes both **frontend and backend** implementations, with user authentication, dynamic product display, and cart management.
+A learning full-stack e-commerce project with a browser-based storefront and a Node.js/Express API backed by MongoDB.
 
----
+## Features
 
-1.## 🚀 Features
+### Frontend
+- Responsive product catalogue and category sections
+- Add and remove cart items
+- Update item quantities and cart count
+- Cart page and checkout interaction prototype
+- Login and signup screens
+- Browser storage for selected client-side state
 
-### 🧩 Frontend (HTML, CSS, JavaScript)
-- Beautiful, responsive interface
-- Product listing by category (T-Shirts, Shoes, Watches, Bags)
-- Add to Cart, Remove, and Quantity Update features
-- Real-time Cart Badge counter
-- Checkout simulation popup
-- Login and Signup pages with styled forms
-- LocalStorage integration for user sessions
+### Backend
+- Express API with authentication routes
+- MongoDB persistence through Mongoose
+- Password hashing with bcryptjs
+- JWT-based authentication flow
+- Environment-based configuration with dotenv
 
-2.### ⚙️ Backend (Node.js + Express + MongoDB)
-- User registration & login with JWT authentication
-- Secure password hashing using **bcrypt**
-- Environment variable management with **dotenv**
-- Database connection via **MongoDB Atlas**
-- Organized project structure for scalability
+> The checkout flow is a demonstration, not a live payment integration. Do not describe it as a production payment system unless a payment provider has actually been integrated and tested.
 
----
+## Tech stack
 
-3.## 🧠 Technologies Used
+HTML, CSS, JavaScript, Node.js, Express, MongoDB, Mongoose, JWT, bcryptjs, and Git.
 
-| Area | Technology |
-|------|-------------|
-| Frontend | HTML5, CSS3, JavaScript |
-| Backend | Node.js, Express.js |
-| Database | MongoDB (Atlas) |
-| Security | JWT, bcrypt.js |
-| Tools | Nodemon, Git, VS Code |
+## Run locally
 
----
+1. Clone the repository and enter the backend folder:
 
-4.## 🖥️ How to Run the Project
+   ```bash
+   git clone https://github.com/Muzammil-s/CodeAlpha-Ecommerence-store.git
+   cd CodeAlpha-Ecommerence-store/backend
+   ```
 
-5.### 1️⃣ Clone the Repository
-```bash
-git clone https://github.com/Muzammil-s/CodeAlpha-Ecommerence-store.git
-cd CodeAlpha-Ecommerence-store
-2️⃣ Backend Setup
-bash
-Copy code
-cd backend
-npm install
-Create a .env file inside the backend folder and add:
+2. Install dependencies:
 
-ini
-Copy code
-PORT=5000
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=mysecretkey
-Start the backend server:
+   ```bash
+   npm install
+   ```
 
-bash
-Copy code
-npm run dev
-3️⃣ Frontend Setup
-Just open index.html in your browser or use VS Code’s Live Server extension.
+3. Create `backend/.env` with local values based on `.env.example`:
 
-6.💾 Folder Structure
-pgsql
-Copy code
-CodeAlpha-Ecommerence-store/
-│
-├── backend/
-│   ├── server.js
-│   ├── models/
-│   ├── routes/
-│   ├── .env
-│   └── package.json
-│
-├── frontend/
-│   ├── index.html
-│   ├── cart.html
-│   ├── login.html
-│   ├── signup.html
-│   ├── app.js
-│   └── style.css
-│
-└── README.md
-7.🧑‍💻 Author
-Muzammil
-🌐 https://github.com/Muzammil-s/CodeAlpha-Ecommerence-store
+   ```env
+   PORT=5000
+   MONGO_URI=mongodb://127.0.0.1:27017/ecommerce_store
+   JWT_SECRET=replace_with_a_long_random_secret
+   ```
 
+4. Start the backend:
+
+   ```bash
+   npm run dev
+   ```
+
+5. Open the frontend entry page from `frontend/` in a browser or with VS Code Live Server. Check the API base URL in the frontend scripts and make sure it matches the local backend.
+
+## Security and repository hygiene
+
+- Keep real `.env` files out of Git.
+- Keep `node_modules/` out of Git; install dependencies with `npm install` from `package.json`.
+- Rotate any database password or signing secret that was previously committed publicly.
+
+## Repository
+
+[github.com/Muzammil-s/CodeAlpha-Ecommerence-store](https://github.com/Muzammil-s/CodeAlpha-Ecommerence-store)
